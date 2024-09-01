@@ -1,27 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-system-bar>
-      <v-spacer></v-spacer>
-
-      <v-icon>mdi-square</v-icon>
-
-      <v-icon>mdi-circle</v-icon>
-
-      <v-icon>mdi-triangle</v-icon>
-    </v-system-bar>
-
-    <v-app-bar>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-app-bar-title>Application</v-app-bar-title>
-    </v-app-bar>
-
-    <v-navigation-drawer
-      v-model="drawer"
-      temporary
-    >
-      <!--  -->
-    </v-navigation-drawer>
+    <app-bar />
 
     <v-main class="bg-grey-lighten-2">
       <v-container>
@@ -35,12 +14,18 @@
             </v-col>
 
             <v-col
-              v-for="j in 6"
-              :key="`${n}${j}`"
+              v-for="(video, index) in videos"
+              :key="`${n}${index}`"
               cols="6"
               md="2"
             >
-              <v-sheet height="150"></v-sheet>
+              <v-sheet height="150">
+                <video-player
+                  :title="video.title"
+                  :url="video.url"
+                  :poster="video.thumbnailUrl	"
+                />
+              </v-sheet>
             </v-col>
           </template>
         </v-row>
@@ -49,14 +34,35 @@
   </v-app>
 </template>
 
-<script setup>
-  import { ref } from 'vue'
-
-  const drawer = ref(null)
-</script>
-
 <script>
+  import AppBar from '@/components/AppBar.vue';
+  import VideoPlayer from '@/components/VideoPlayer.vue';
+
+  import axios from 'axios'
   export default {
-    data: () => ({ drawer: null }),
+    data: () => ({ 
+      drawer: null,
+      search: '',
+      videos: [],
+      loading: false
+
+    }),
+    components: { AppBar, VideoPlayer },
+    created: function() {
+      this.searchVideos()
+    },
+    methods: {
+      searchVideos() {
+        // this.loading = true;
+        // call axios to fetch data
+        axios.get('https://jsonplaceholder.typicode.com/photos')
+          .then(response => {
+            this.videos = response.data;
+            // this.loading = false;
+            console.log(this.videos)
+            console.log(response)
+          })
+      }
+    }
   }
 </script>

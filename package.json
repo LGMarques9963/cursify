@@ -6,10 +6,11 @@
     "serve": "vite preview",
     "build": "vite build",
     "lint": "vue-cli-service lint",
-    "dev": "vite"
+    "dev": "vite --host"
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
+    "axios": "^1.7.7",
     "core-js": "^3.8.3",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
